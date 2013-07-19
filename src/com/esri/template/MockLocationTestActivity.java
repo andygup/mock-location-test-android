@@ -1,6 +1,7 @@
 package com.esri.template;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.esri.core.symbol.SimpleMarkerSymbol;
 import com.esri.quickstart.EsriQuickStart;
 import com.esri.quickstart.EsriQuickStart.MapType;
 
@@ -68,6 +70,7 @@ public class MockLocationTestActivity extends Activity {
 			@Override
 			public void onLocationChanged(Location location) {
 	    		_esriQuickStartLib.centerAt(location.getLatitude(), location.getLongitude(), true);
+		    	_esriQuickStartLib.addGraphicLatLon(location.getLatitude(), location.getLongitude(), null, SimpleMarkerSymbol.STYLE.CIRCLE,Color.BLUE,10);
 			}
 
 			@Override
