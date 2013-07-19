@@ -1,7 +1,7 @@
 mock-location-test-android
 ==========================
 
-Shows how to use mock locations in Android.
+Shows how to send locations in Android.
 
 ## Screen shot
 

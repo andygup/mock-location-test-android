@@ -18,7 +18,7 @@ import com.esri.quickstart.EsriQuickStart.MapType;
 
 public class MockLocationTestActivity extends Activity {
 	
-	EsriQuickStart _esriQuickStartLib = null;
+	EsriQuickStart _map = null;
 	Button _mockLocationButton = null;
 	MockLocationTest _locationTest;
 	LocationListener _locationListener;
@@ -31,8 +31,8 @@ public class MockLocationTestActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-		_esriQuickStartLib = new EsriQuickStart(this,R.id.map);
-		_esriQuickStartLib.addLayer(MapType.STREETS, null, null, null,true);
+		_map = new EsriQuickStart(this,R.id.map);
+		_map.addLayer(MapType.STREETS, null, null, null,true);
 		
 		_mockLocationButton = (Button) findViewById(R.id.button1);
 		_latitudeText = (EditText) findViewById(R.id.latitude);
@@ -69,8 +69,8 @@ public class MockLocationTestActivity extends Activity {
 
 			@Override
 			public void onLocationChanged(Location location) {
-	    		_esriQuickStartLib.centerAt(location.getLatitude(), location.getLongitude(), true);
-		    	_esriQuickStartLib.addGraphicLatLon(location.getLatitude(), location.getLongitude(), null, SimpleMarkerSymbol.STYLE.CIRCLE,Color.BLUE,10);
+	    		_map.centerAt(location.getLatitude(), location.getLongitude(), true);
+		    	_map.addGraphicLatLon(location.getLatitude(), location.getLongitude(), null, SimpleMarkerSymbol.STYLE.CIRCLE,Color.BLUE,10);
 			}
 
 			@Override
@@ -102,10 +102,18 @@ public class MockLocationTestActivity extends Activity {
 		String lat = _latitudeText.getText().toString();
 		String lon = _longitudeText.getText().toString();
 		
+		if(_locationTest.getLocationManager().getProvider(LocationManager.GPS_PROVIDER) != null){
+			_locationTest.getLocationManager().removeTestProvider(LocationManager.GPS_PROVIDER);
+			setLocationManager();
+			_map.clearAllGraphics();
+			_locationTest.clearLocation();
+		}
+			
+		
 		if(!lat.equals("") && !lon.equals("") && _allowed == true){
 			latitude = Double.parseDouble(lat);
 			longitude = Double.parseDouble(lon);
-			_locationTest.addNewLocation(latitude,longitude, 3, 0, 0, 0, 0);
+			_locationTest.addNewLocation(latitude,longitude, 3, 0, 0, 0, System.currentTimeMillis());
 		}
 		else{
 			Toast toast = Toast.makeText(getApplicationContext(), "Invalid locations.Try again.", Toast.LENGTH_LONG);
@@ -121,13 +129,13 @@ public class MockLocationTestActivity extends Activity {
 	
 	@Override
 	protected void onPause() {
-		_esriQuickStartLib.pause();
+		_map.pause();
 		super.onPause();
 	}
 	
 	@Override 	protected void onResume() {
 		super.onResume(); 
-		_esriQuickStartLib.unpause();
+		_map.unpause();
 	}
 
 }
