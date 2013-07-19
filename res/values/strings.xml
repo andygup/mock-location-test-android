@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mock Location Test</string>
+    <string name="latitude">38.89</string>
+    <string name="longitude">-77.03</string>
+</resources>
